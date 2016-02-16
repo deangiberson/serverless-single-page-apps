@@ -2,16 +2,23 @@
 
 var learnjs = {};
 
-learnjs.problemjs = function() {
-    return $('<div class="problem-view">').text('Coming soon!');
+learnjs.problemView = function(problemNumber) {
+    var title = 'Problem #' + problemNumber + ' Coming Soon!';
+    return $('<div class="problem-view">').text(title);
 };
 
 learnjs.showView = function(hash) {
     var routes = {
-	'#problem-1' : learnjs.problemjs
+	'#problem' : learnjs.problemView
     };
-    var viewFn = routes[hash];
+
+    var hashParts = hash.split('-');
+
+    var route = hashParts[0];
+    var param = hashParts[1];
+
+    var viewFn = routes[route];
     if (viewFn) {
-	$('.view-container').empty().append(viewFn);
+	$('.view-container').empty().append(viewFn(param));
     }
 };
