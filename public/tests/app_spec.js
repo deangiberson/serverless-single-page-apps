@@ -28,10 +28,20 @@ describe('LearnJS', function() {
 	expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
     });
 
+    it('replaces data attributes', function(){
+	var template = $('<div/>').html('<span data-one="" data-two=""').contents();
+	var data = { 'one':'one',
+		     'two':'two'
+		     //'three':'three'
+		   };
+	learnjs.applyObject(data, template);
+	//expect(template.text()).toEqual('<span data-one="one" data-two="two">');
+    });
+
     describe('problem view', function() {
 	it('has a title that includes problem number', function() {
 	    var view = learnjs.problemView('1');
-	    expect(view.text().trim()).toEqual('Problem #1');
+	    expect(view.text().trim()).toMatch(/Problem #1/);
 	});
     });
 });
