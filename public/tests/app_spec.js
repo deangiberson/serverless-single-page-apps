@@ -46,11 +46,25 @@ describe('LearnJS', function() {
 	    expect(view.find('[data-name="code"]').text()).toEqual('function problem() { return __; }');
 	});
 
+	it('creates template clones', function() {
+	    var clone = learnjs.template('correct-flash');
+	    expect(clone.find('span').text()).toEqual('Correct!');
+	    expect(clone.find('a').text()).toEqual('Next Problem');
+	});
+
+	it('correctly chooses next problem', function() {
+	    var view = learnjs.buildCorrectFlash(1);
+	    expect(view.find('a').attr('href')).toEqual('#problem-2');
+
+	    view = learnjs.buildCorrectFlash(learnjs.problems.length);
+	    expect(view.find('a').attr('href')).toEqual('');
+	});
+
 	describe('answer section', function() {
 	    it('can check a correct answer by hitting a button', function() {
 		view.find('.answer').val('true');
 		view.find('.check-btn').click();
-		expect(view.find('.result').text()).toEqual('Correct!');
+		expect(view.find('.result').find('span').text()).toEqual('Correct!');
 	    });
 
 	    it('rejects an incorrect answer', function() {
