@@ -2,6 +2,10 @@
 
 var learnjs = {};
 
+learnjs.landingView = function() {
+    return learnjs.template('landing-view');
+};
+
 learnjs.problemView = function(data) {
     var problemNumber = parseInt(data, 10);
     var view = $('.templates .problem-view').clone();
@@ -32,6 +36,7 @@ learnjs.problemView = function(data) {
 
 learnjs.showView = function(hash) {
     var routes = {
+	'' : learnjs.landingView,
 	'#problem' : learnjs.problemView
     };
 
