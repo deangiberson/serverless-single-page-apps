@@ -15,6 +15,12 @@ describe('LearnJS', function() {
 	expect(learnjs.problemView).toHaveBeenCalledWith('42');
     });
 
+    it('triggers removingView event when removing the view', function() {
+	spyOn(learnjs, 'triggerEvent');
+	learnjs.showView('#problem-1');
+	expect(learnjs.triggerEvent).toHaveBeenCalledWith('removingView', []);
+    });
+
     it('invokes the router when loaded', function() {
 	spyOn(learnjs,'showView');
 	learnjs.appOnReady();
@@ -26,6 +32,31 @@ describe('LearnJS', function() {
 	spyOn(learnjs,'showView');
 	$(window).trigger('hashchange');
 	expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
+    });
+
+    it('can flash an element while setting the text', function() {
+	var elem = $('<p>');
+	spyOn(elem, 'fadeOut').and.callThrough();
+	spyOn(elem, 'fadeIn');
+	learnjs.flashElement(elem, "new text");
+	expect(elem.text()).toEqual("new text");
+	expect(elem.fadeOut).toHaveBeenCalled();
+	expect(elem.fadeIn).toHaveBeenCalled();
+    });
+
+    it('can redirect to main view after the last problem is answered', function() {
+	var flash = learnjs.buildCorrectFlash(2);
+	expect(flash.find('a').attr('href')).toEqual("");
+	expect(flash.find('a').text()).toEqual("You're finished!");
+    });
+
+    it('can trigger events on the view', function() {
+	callback = jasmine.createSpy('callback');
+	var div = $('<div>').bind('fooEvent', callback);
+	$('.view-container').append(div);
+	learnjs.triggerEvent('fooEvent', ['bar']);
+	expect(callback).toHaveBeenCalled();
+	expect(callback.calls.argsFor(0)[1]).toEqual('bar');
     });
 
     describe('problem view', function() {
