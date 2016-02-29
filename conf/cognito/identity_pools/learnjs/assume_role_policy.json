@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+	"Federated": "cognito-identity.amazonaws.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+	"StringEquals": {
+	  "cognito-identity.amazonaws.com:aud": "us-east-1:dfa6ddd2-25df-4d39-bc0f-c8aefa2ac09d"
+	},
+	"ForAnyValue:StringLike": {
+	  "cognito-identity.amazonaws.com:amr": "authenticated"
+	}
+      }
+    }
+  ]
+}
