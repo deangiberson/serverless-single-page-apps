@@ -59,6 +59,12 @@ describe('LearnJS', function() {
 	expect(callback.calls.argsFor(0)[1]).toEqual('bar');
     });
 
+    it('can create a profile view', function() {
+	var div = learnjs.profileView();
+	expect(div.find('h3').text()).toEqual("Your Profile");
+	expect(div.find('.email').text()).toEqual("");
+    });
+
     describe('problem view', function() {
 	var view;
 	beforeEach(function() {

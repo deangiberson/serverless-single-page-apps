@@ -9,7 +9,7 @@ function googleSignIn(googleUser) {
 	    Logins: {
 		'accounts.google.com': id_token
 	    }
-	});
+	})
     });
     function refresh() {
 	return gapi.auth2.getAuthInstance().signIn({
@@ -93,6 +93,7 @@ learnjs.problemView = function(data) {
 learnjs.showView = function(hash) {
     var routes = {
 	'#problem' : learnjs.problemView,
+	'#profile' : learnjs.profileView,
 	'#' : learnjs.landingView,
 	'' : learnjs.landingView
     };
@@ -114,6 +115,7 @@ learnjs.appOnReady = function() {
 	learnjs.showView(window.location.hash);
     };
     learnjs.showView(window.location.hash);
+    learnjs.identity.done(learnjs.addProfileLink);
 };
 
 learnjs.problems = [
@@ -158,4 +160,18 @@ learnjs.buildCorrectFlash = function(problemNumber) {
 
 learnjs.triggerEvent = function(name,args) {
     $('.view-container>*').trigger(name, args);
+};
+
+learnjs.profileView = function() {
+    var view = learnjs.template('profile-view');
+    learnjs.identity.done(function(identity) {
+	view.find('.email').text(identity.email);
+    });
+    return view;
+};
+
+learnjs.addProfileLink = function() {
+    var link = learnjs.profileView();
+    link.find('a').text(profile.email);
+    $('.signin-bar').prepend(link);
 };
