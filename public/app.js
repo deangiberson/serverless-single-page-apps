@@ -170,8 +170,8 @@ learnjs.profileView = function() {
     return view;
 };
 
-learnjs.addProfileLink = function() {
-    var link = learnjs.profileView();
+learnjs.addProfileLink = function(profile) {
+    var link = learnjs.template('profile-link');
     link.find('a').text(profile.email);
     $('.signin-bar').prepend(link);
 };

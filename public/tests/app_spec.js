@@ -65,6 +65,19 @@ describe('LearnJS', function() {
 	expect(div.find('.email').text()).toEqual("");
     });
 
+    it('adds the profile link when the user logs in', function() {
+	var profile = {email: 'foo@bar.com'};
+	spyOn(learnjs, 'addProfileLink');
+	learnjs.appOnReady();
+	learnjs.identity.resolve(profile);
+	expect(learnjs.addProfileLink).toHaveBeenCalledWith(profile);
+    });
+
+    it('can append a profile view link to navbar', function() {
+	learnjs.addProfileLink({email: 'foo@bar.com'});
+	expect($('.signin-bar a').attr('href')).toEqual('#profile');
+    });
+
     describe('problem view', function() {
 	var view;
 	beforeEach(function() {
