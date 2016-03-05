@@ -31,7 +31,7 @@ function googleSignIn(googleUser) {
 };
 
 var learnjs = {
-    poolId: '279863786192-ce2dbbve8af5ttgv100d4fl1hk0plv27.apps.googleusercontent.com'
+    poolId: 'us-east-1:28fa74b4-7d27-4bb4-bb09-9c73460bf12e'
 };
 
 learnjs.identity = new $.Deferred();
