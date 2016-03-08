@@ -42,7 +42,7 @@ learnjs.awsRefresh = function() {
 	if (err) {
 	    deferred.reject(err);
 	} else {
-	    deferred.resolve(AWS.config.credentials.identity.Id);
+	    deferred.resolve(AWS.config.credentials.identityId);
 	}
     });
     return deferred.promise();
@@ -75,10 +75,6 @@ learnjs.problemView = function(data) {
 	return false;
     }
 
-    view.find('.check-btn').click(checkAnswerClick);
-    view.find('.title').text('Problem #' + problemNumber);
-    learnjs.applyObject(learnjs.problems[problemNumber - 1], view);
-
     if (problemNumber < learnjs.problems.length) {
 	var buttonItem = learnjs.template('skip-btn');
 	buttonItem.find('a').attr('href', "#problem-" + (problemNumber + 1));
@@ -88,6 +84,9 @@ learnjs.problemView = function(data) {
 	});
     }
 
+    view.find('.check-btn').click(checkAnswerClick);
+    view.find('.title').text('Problem #' + problemNumber);
+    learnjs.applyObject(learnjs.problems[problemNumber - 1], view);
     return view;
 };
 
@@ -183,11 +182,13 @@ learnjs.sendDbRequest = function(req, retry) {
 	if (error.code === 'CredentialsError') {
 	    learnjs.identity.then(function(identity) {
 		return identity.refresh().then(function() {
-		    return retry;
+		    return retry();
 		}, function() {
 		    promise.reject(resp);
 		});
 	    });
+	} else {
+	    promise.reject(error);
 	}
     });
     req.on('success', function(resp) {
