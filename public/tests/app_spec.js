@@ -159,6 +159,36 @@ describe('LearnJS', function() {
 
   });
 
+    describe('with Lambda', function() {
+	var lambdaspy, req, identityObj;
+	beforeEach(function() {
+	    lambdaspy = jasmine.createSpyObj('lambda', ['invoke']);
+	    spyOn(AWS,'Lambda').and.returnValue(lambdaspy);
+	    spyOn(learnjs, 'sendAwsRequest');
+	    identityObj = {id: 'COGNITO_ID'};
+	    learnjs.identity.resolve(identityObj);
+	});
+
+	describe('popularAnswers', function() {
+	    beforeEach(function() {
+		lambdaspy.invoke.and.returnValue('request');
+	    });
+
+	it('calls to Lambda', function() {
+	    learnjs.sendAwsRequest.and.returnValue(new $.Deferred().resolve('item'));
+	    learnjs.popularAnswers(1).then(function(item) {
+		expect(item).toEqual('item');
+		expect(learnjs.sendAwsRequest).toHaveBeenCalledWith('request', jasmine.any(Function));
+		expect(lambdaspy.invoke).toHaveBeenCalledWith({
+		    FunctionName: 'learnjs_popularAnswers',
+		    Payload: '{"problemNumber":1}'
+		});
+	    });
+	});
+
+	});
+    });
+
   describe('sendAwsRequest', function() {
     var request, requestHandlers, promise, retrySpy;
     beforeEach(function() {
